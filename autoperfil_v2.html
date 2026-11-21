@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B0F14">
+<title>AutoPerfil</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--bg:#0b0f14;--cd:#111821;--cd2:#0d131a;--bd:#1f2a36;--fg:#f1f5f9;--mu:#8795a6;--pr:#ff7a1a;--red:#f87171;--amb:#fbbf24;--grn:#4ade80;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto 0;height:340px;background:radial-gradient(60% 100% at 50% 0,rgba(255,122,26,.22),transparent);pointer-events:none}
+a{color:inherit;text-decoration:none}svg{flex:none}
+.w{max-width:820px;margin:0 auto;padding:22px 18px 120px;position:relative}
+.top{position:sticky;top:0;z-index:20;background:rgba(11,15,20,.94);border-bottom:1px solid var(--bd)}
+.tw{max-width:820px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:19px}.logo b{color:var(--pr)}
+.logo.big{font-size:26px;justify-content:center}
+.mk{width:36px;height:36px;border-radius:12px;background:var(--pr);color:#1f0f02;display:grid;place-items:center}
+.top nav{display:flex;gap:6px;order:3;width:100%;overflow-x:auto}
+@media(min-width:700px){.top nav{order:0;width:auto}}
+.top nav a{padding:7px 14px;border-radius:99px;color:var(--mu);font-weight:500;white-space:nowrap}
+.top nav a.on{background:rgba(255,122,26,.14);color:var(--pr)}
+.usr{margin-left:auto;display:flex;align-items:center;gap:10px;text-align:right;font-size:12px}
+.usr div{display:flex;flex-direction:column}.usr span{color:var(--mu)}
+.av{width:36px;height:36px;border-radius:50%;background:var(--cd);border:1px solid var(--bd);color:var(--pr);font-weight:700;display:grid;place-items:center}
+.lo{background:none;border:0;color:var(--mu);cursor:pointer;padding:6px}
+h1{font-size:28px;margin:6px 0 2px;letter-spacing:-.02em}.h1s{font-size:22px;margin:0}
+h2{font-size:17px;margin:0 0 6px}h3{font-size:16px;margin:8px 0 2px}
+.sec{font-size:12px;letter-spacing:.08em;color:var(--mu);margin:22px 0 8px}
+.mu{color:var(--mu)}.s{font-size:12.5px}.red{color:var(--red)}.ct{text-align:center}
+.c{background:var(--cd);border:1px solid var(--bd);border-radius:20px;padding:16px;margin-top:14px}
+.hl{border-color:rgba(255,122,26,.5);box-shadow:0 0 40px -14px rgba(255,122,26,.55)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;background:var(--pr);color:#1f0f02;padding:13px 18px;border-radius:14px;font:600 15px inherit;font-family:inherit;cursor:pointer}
+.btn.sm{padding:9px 14px;font-size:14px}.btn.wide{width:100%;margin-top:14px}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--bd)}
+.ib{width:42px;height:42px;border-radius:12px;background:var(--cd);border:1px solid var(--bd);color:var(--fg);display:grid;place-items:center;cursor:pointer}
+.hd{display:flex;align-items:center;gap:12px;margin-bottom:6px}.hd>div{flex:1;min-width:0}
+label{display:block;font-size:13px;font-weight:600;margin-top:12px}
+input,select,textarea{width:100%;margin-top:6px;padding:13px;border:1px solid var(--bd);border-radius:14px;background:var(--cd2);color:var(--fg);font:inherit;font-weight:400}
+input::placeholder,textarea::placeholder{color:#5d6b7b}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--pr)}
+.two,.four{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+@media(min-width:700px){.four{grid-template-columns:1fr 2fr 1.3fr 1.3fr}}
+.sbox{display:flex;align-items:center;gap:10px;background:var(--cd);border:1px solid var(--bd);border-radius:16px;padding:0 14px;margin-top:14px;color:var(--mu)}
+.sbox input{border:0;background:none;margin:0;padding:14px 0}
+.pills,.chs{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.pills{margin:12px 0}
+.pill{border:1px solid var(--bd);background:var(--cd);color:var(--fg);border-radius:99px;padding:7px 16px;font:500 14px inherit;font-family:inherit;cursor:pointer}
+.pill.on{border-color:var(--pr);color:var(--pr);background:rgba(255,122,26,.1)}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;background:var(--cd2);border:1px solid var(--bd);border-radius:8px;padding:3px 9px}
+.ch{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;border-radius:99px;padding:3px 10px;border:1px solid var(--bd);color:var(--mu)}
+.ch.red{color:var(--red);background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.35)}
+.ch.amb{color:var(--amb);background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.35)}
+.ch.grn{color:var(--grn);background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.35)}
+.ch.cy{color:var(--pr);background:rgba(255,122,26,.1);border-color:rgba(255,122,26,.35)}
+.vc{display:flex;gap:14px;align-items:flex-start;background:var(--cd);border:1px solid var(--bd);border-radius:20px;padding:16px;margin-top:12px}
+.vc:hover{border-color:rgba(255,122,26,.5)}
+.vi{width:46px;height:46px;border-radius:14px;background:var(--cd2);color:var(--pr);display:grid;place-items:center}
+.vb{flex:1;min-width:0}.yr{color:var(--mu);font-weight:600}
+.vm{display:flex;gap:10px;align-items:center;margin:6px 0 10px}
+.tr{background:none;border:0;color:var(--mu);cursor:pointer;padding:6px;font:inherit;font-size:13px;display:inline-flex;gap:5px;align-items:center}.tr:hover{color:var(--red)}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.kv span{display:block;color:var(--mu);font-size:13px}.kv b{word-break:break-all}
+.tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));background:var(--cd);border:1px solid var(--bd);border-radius:16px;padding:5px;margin-top:18px}
+.tabs button{border:0;background:none;color:var(--mu);padding:10px 4px;border-radius:12px;font:500 14px inherit;font-family:inherit;cursor:pointer}
+.tabs button.on{background:var(--cd2);color:var(--pr)}
+.pf{border:1px solid;border-radius:18px;padding:14px;margin-top:10px;background:var(--cd)}
+.pf.urgente{border-color:rgba(248,113,113,.45)}.pf.atencao{border-color:rgba(251,191,36,.45)}.pf.monitorar{border-color:rgba(74,222,128,.4)}
+.pf.ok{opacity:.55}
+.rs{background:none;border:0;color:var(--mu);cursor:pointer;display:flex;align-items:center;gap:6px;font:inherit}
+.ln{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--bd)}
+.ln .pr{text-align:right;display:flex;flex-direction:column}
+.tot{display:flex;justify-content:space-between;padding-top:10px;border-top:1px solid var(--bd);font-size:16px}.tot b{color:var(--pr)}
+#itens{counter-reset:it}.it{counter-increment:it;border:1px solid var(--bd);border-radius:16px;padding:12px;margin-bottom:10px;background:var(--cd2)}
+.it .ih b::before{content:"Item " counter(it)}
+.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(17,24,33,.97);border-top:1px solid var(--bd);padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));z-index:30}
+.bar>*{max-width:784px;margin-left:auto;margin-right:auto}.bar .row{margin-bottom:0}.bar b{font-size:18px}
+.bar .btn{display:flex;margin-top:10px}
+.role{display:flex;flex-direction:column}.role ul{list-style:none;padding:0;margin:14px 0 18px;flex:1}
+.role li{display:flex;gap:9px;align-items:center;margin:8px 0;color:var(--fg)}.role li svg{color:var(--pr)}
+.ri{width:56px;height:56px;border-radius:18px;background:var(--cd2);color:var(--pr);display:grid;place-items:center;margin-bottom:14px}.ri.on{background:var(--pr);color:#1f0f02}
+.two2{display:grid;gap:16px;margin-top:22px}@media(min-width:700px){.w.hm{padding-top:40px}}
+.w.hm{max-width:1000px}@media(min-width:900px){.two2{grid-template-columns:repeat(3,1fr)}}
+.lk{display:block;text-align:center;margin-top:12px;color:var(--mu);font-size:13px;text-decoration:underline}
+.h1b{font-size:30px;margin-top:34px}
+.sw{flex:none;width:50px;height:28px;border-radius:99px;border:0;background:var(--bd);position:relative;cursor:pointer}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s}
+.sw.on{background:var(--pr)}.sw.on::after{left:25px}
+.note{background:var(--cd2);border:1px solid var(--bd);border-radius:14px;padding:12px;font-size:13px;margin-top:10px}
+#qr{display:inline-block;background:#fff;padding:10px;border-radius:14px;margin:10px 0}
+#label{text-align:center}
+video{width:100%;border-radius:18px;background:#000;max-height:340px;object-fit:cover}
+.ph{position:relative;display:inline-block}.ph img,.fo{width:84px;height:84px;object-fit:cover;border-radius:12px;margin:4px 6px 0 0;cursor:zoom-in}
+.ph button{position:absolute;top:0;right:2px;background:#000;color:#fff;border:0;border-radius:50%;width:22px;height:22px;cursor:pointer}
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.9);display:grid;place-items:center;z-index:99}.lb img{max-width:94%;max-height:90%}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#e8eef5;color:#0b0f14;padding:11px 16px;border-radius:12px;font-weight:600;opacity:0;transition:.25s;pointer-events:none;z-index:99;max-width:90%}
+#toast.on{opacity:1}
+@media print{body *{visibility:hidden}#label,#label *{visibility:visible}#label{position:absolute;left:0;top:0;color:#000;border:0;background:#fff}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast"></div>
+<script>
+/* ========== UTILITÁRIOS ========== */
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const E=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const brl=n=>(+n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const hoje=()=>iso(new Date());
+const diasAte=s=>Math.round((new Date(s+"T12:00:00")-new Date(hoje()+"T12:00:00"))/864e5);
+const addMeses=(s,m)=>{const d=new Date(s+"T12:00:00");d.setMonth(d.getMonth()+m);return iso(d)};
+const dl=s=>new Date(s+"T12:00:00").toLocaleDateString("pt-BR",{day:"numeric",month:"short",year:"numeric"});
+const km=n=>(+n||0).toLocaleString("pt-BR");
+const ini=n=>String(n).split(" ").slice(0,2).map(x=>x[0]).join("").toUpperCase();
+const nz=s=>String(s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+const mem={};
+function lget(k){try{return localStorage.getItem(k)}catch(e){return mem[k]||null}}
+function lset(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){mem[k]=v}}
+function uid(n){const a=new Uint8Array(n);crypto.getRandomValues(a);return[...a].map(b=>"abcdefghjkmnpqrstuvwxyz23456789"[b%31]).join("")}
+async function hash(u,p){try{const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("ap3:"+u+":"+p));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}catch(e){return"x"+btoa(u+p)}}
+function toast(m){const t=$("#toast");t.textContent=m;t.className="on";setTimeout(()=>t.className="",2800)}
+function show(h){$("#app").innerHTML=h;window.scrollTo(0,0)}
+function go(h){location.hash=h}
+function copiar(t){if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>toast("Copiado"),()=>prompt("Copie:",t));else prompt("Copie:",t)}
+
+/* ========== ÍCONES ========== */
+const IC={wrench:"M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9z",car:"M3 13l2-6h14l2 6v5H3zM3 13h18M7 18v2M17 18v2",qr:"M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3zM15 15h2v2h-2zM19 15h2v2h-2zM15 19h2v2h-2zM19 19h2v2h-2z",shield:"M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z",clip:"M8 4h8v3H8zM6 5H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-1M9 12h6M9 16h6",search:"M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM21 21l-4.3-4.3",trash:"M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3",plus:"M12 5v14M5 12h14",back:"M15 18l-6-6 6-6",scan:"M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M4 12h16",save:"M5 3h11l3 3v15H5zM8 3v5h7V3M8 21v-7h8v7",alert:"M12 4l9 16H3zM12 10v4M12 17h.01",check:"M5 12l5 5 9-10",out:"M9 4H5v16h4M16 8l4 4-4 4M20 12H9",store:"M4 9l1-5h14l1 5M4 9v11h16V9M4 9a3 3 0 0 0 5.3 1.9A3 3 0 0 0 12 12a3 3 0 0 0 2.7-1.1A3 3 0 0 0 20 9M10 20v-5h4v5",eye:"M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z",cam:"M4 8h3l2-3h6l2 3h3v11H4zM12 11a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"};
+const I=(n,s=18)=>`<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${IC[n]}"/></svg>`;
+const mark=()=>`<span class="mk">${I("wrench",20)}</span>`;
+
+/* ========== DADOS (começa vazio; tudo fica salvo neste navegador) ========== */
+const CATS=["Troca de óleo","Filtros","Motor","Transmissão","Embreagem","Suspensão","Freios","Sistema elétrico","Arrefecimento","Alimentação","Direção","Pneus","Ar-condicionado","Carroceria","Escapamento","Correias","Revisão geral","Outros"];
+["ap3","ap3m","ap3d"].forEach(k=>lset(k,null)); /* apaga os dados de teste antigos */
+let DB=(()=>{const b={of:[],ve:[],se:[],pf:[],ob:[],ag:[]};try{return Object.assign(b,JSON.parse(localStorage.getItem("ap4")||"{}"))}catch(e){return b}})();
+function save(){try{localStorage.setItem("ap4",JSON.stringify(DB));return true}catch(e){toast("Não foi possível salvar neste navegador");return false}}
+const ms=()=>lget("ap4m"),ofNome=id=>(DB.of.find(o=>o.id===id)||{}).nome||"Oficina";
+const vOf=id=>DB.ve.find(v=>v.id===id);
+const pfs=vid=>DB.pf.filter(p=>p.vid===vid&&!p.ok);
+const linkQ=v=>location.href.split("#")[0]+"#/q/"+v.codigo;
+const NIV={urgente:["red","Urgente","alert"],atencao:["amb","Atenção","alert"],monitorar:["grn","Monitorar","eye"]};
+const chipNivel=n=>`<span class="ch ${NIV[n][0]}">${I(NIV[n][2],13)} ${NIV[n][1]}</span>`;
+function topNivel(v){const a=pfs(v.id);const n=["urgente","atencao","monitorar"].find(x=>a.some(p=>p.nivel===x));return n?`<span class="ch ${NIV[n][0]}">Problema futuro: ${NIV[n][1].toLowerCase()}</span>`:""}
+function mkQR(el,t){if(window.QRCode){el.innerHTML="";new QRCode(el,{text:t,width:160,height:160})}else el.textContent="QR indisponível sem internet"}
+
+/* ========== ROTAS ========== */
+let scanStream=null,scanT=0;
+function scanParar(){clearTimeout(scanT);if(scanStream){scanStream.getTracks().forEach(t=>t.stop());scanStream=null}}
+function route(){scanParar();
+ const[a,b,c,d]=(location.hash.slice(1)||"/").split("/").filter(Boolean);
+ const me=DB.of.find(o=>o.id===ms()),dv=vOf(lget("ap4d"));
+ if(!a)return home();
+ if(a==="q")return qrEntrada(decodeURIComponent(b||""));
+ if(a==="qm")return qrMec(decodeURIComponent(b||""));
+ if(a==="r")return revenda(decodeURIComponent(b||""));
+ if(a==="entrar")return b==="dono"?entrarDono(c):b==="rev"?entrarRev():entrarMec();
+ if(a==="m"){if(!me)return go("/entrar/mec");
+  if(!b)return biblio(me);if(b==="scan")return scan(me);if(b==="agenda")return agenda(me);if(b==="assinatura")return assin(me);
+  if(b==="novo")return novo(me);if(b==="entregue")return entregue(me,c);
+  if(b==="v")return d==="manut"?manut(me,c):veiculo(me,c)}
+ if(a==="d"){if(!dv)return go("/entrar/dono");return driver(dv)}
+ home()}
+window.addEventListener("hashchange",route);
+
+/* Painel que abre quando alguém lê o QR Code do carro */
+function qrEntrada(code){const v=DB.ve.find(x=>x.codigo===code.toUpperCase());
+ if(!v)return show(`<main class="w ct"><a class="logo big" href="#/">${mark()}Auto<b>Perfil</b></a><h1>Veículo não encontrado</h1><p class="mu">Neste protótipo, os dados só existem no aparelho onde foram cadastrados.</p><a class="btn" href="#/">Início</a></main>`);
+ show(`<main class="w"><div class="ct"><a class="logo big" href="#/">${mark()}Auto<b>Perfil</b></a></div>
+ <section class="c hl ct"><div class="mu s">${E(v.versao)} · ${E(v.cor)}</div><h1 class="h1s">${E(v.marca)} ${E(v.modelo)} ${E(v.ano)}</h1><div class="mu" style="margin-top:6px"><code>${E(v.placa)}</code></div></section>
+ <h4 class="sec">COMO VOCÊ QUER ACESSAR?</h4>
+ <a class="vc" href="#/qm/${v.codigo}"><span class="vi">${I("wrench",24)}</span><div class="vb"><b>Mecânico</b><div class="mu s">Ver o histórico e registrar o serviço.</div></div></a>
+ <a class="vc" href="#/entrar/dono/${v.codigo}"><span class="vi">${I("car",24)}</span><div class="vb"><b>Motorista</b><div class="mu s">Entrar com o usuário e a senha deste carro.</div></div></a>
+ <a class="vc" href="#/r/${v.codigo}"><span class="vi">${I("store",24)}</span><div class="vb"><b>Revenda</b><div class="mu s">Ver as revisões, se o dono liberou.</div></div></a></main>`)}
+function qrMec(code){const v=DB.ve.find(x=>x.codigo===code.toUpperCase());if(!v)return go("/");if(ms())return go("/m/v/"+v.id);lset("ap4r",v.codigo);go("/entrar/mec")}
+function posLogin(){const c=lget("ap4r");lset("ap4r",null);const v=c&&DB.ve.find(x=>x.codigo===c);go(v?"/m/v/"+v.id:"/m")}
+
+/* ========== HOME ========== */
+const feat=(i,t)=>`<li>${I(i,16)}${t}</li>`;
+function home(){show(`<main class="w hm"><div class="ct"><a class="logo big" href="#/">${mark()}Auto<b>Perfil</b></a><p class="mu" style="max-width:360px;margin:12px auto 0">O histórico completo de cada carro, para saber tudo antes de abrir o capô.</p></div>
+<h1 class="ct h1b">Como você quer usar o app?</h1>
+<div class="two2">
+<section class="c role"><span class="ri">${I("car",28)}</span><h2>Sou Dono de Veículo</h2><p class="mu">Guarde o histórico do seu carro e marque revisões.</p><ul>${feat("qr","QR Code do seu carro")}${feat("shield","Você controla o acesso")}</ul><a class="btn ghost" href="#/entrar/dono">Entrar com usuário e senha</a></section>
+<section class="c role hl"><span class="ri on">${I("wrench",28)}</span><h2>Sou Mecânico</h2><p class="mu">Escaneie o carro, veja o que já foi feito e registre o serviço.</p><ul>${feat("clip","Histórico e peças trocadas")}${feat("cam","Fotos dos problemas")}</ul><a class="btn" href="#/entrar/mec">Entrar com e-mail e senha</a></section>
+<section class="c role"><span class="ri">${I("store",28)}</span><h2>Sou Revenda</h2><p class="mu">Consulte as revisões de um carro liberado pelo dono.</p><ul>${feat("eye","Revisões, datas e trocas")}${feat("shield","Sem preços e sem dados pessoais")}</ul><a class="btn ghost" href="#/entrar/rev">Consultar pelo código</a></section>
+</div><p class="mu ct s" style="margin-top:28px">Protótipo: os dados ficam salvos neste navegador.</p></main>`)}
+function sair(){lset("ap4m",null);go("/")}
+function sairD(){lset("ap4d",null);go("/")}
+
+/* ========== LOGIN ========== */
+let falhas=0,trava=0;
+function entrarMec(){show(`<main class="w" style="max-width:460px"><a class="logo" href="#/">${mark()}Auto<b>Perfil</b></a><h1>Acesso da oficina</h1>
+<form class="c" onsubmit="doLoginM(event);return false"><label>E-mail<input id="le" type="email" required></label><label>Senha<input id="lp" type="password" required></label><button class="btn wide">Entrar</button></form>
+<form class="c" onsubmit="doRegM(event);return false"><h2>Primeiro acesso?</h2><label>Nome da oficina<input id="rn" required></label><label>Seu nome<input id="rr" required></label><label>E-mail<input id="re" type="email" required></label><label>Senha (mínimo 6)<input id="rp" type="password" minlength="6" required></label><button class="btn ghost wide">Criar conta da oficina</button></form>
+</main>`)}
+async function doLoginM(e){e.preventDefault();
+ if(Date.now()<trava)return toast("Muitas tentativas. Aguarde alguns segundos.");
+ const em=$("#le").value.trim().toLowerCase(),h=await hash(em,$("#lp").value),o=DB.of.find(x=>x.email===em&&x.hash===h);
+ if(!o){if(++falhas>=5){trava=Date.now()+30000;falhas=0}return toast("E-mail ou senha incorretos")}
+ falhas=0;lset("ap4m",o.id);posLogin()}
+async function doRegM(e){e.preventDefault();const em=$("#re").value.trim().toLowerCase();
+ if(DB.of.some(x=>x.email===em))return toast("Esse e-mail já tem conta");
+ const o={id:uid(8),nome:$("#rn").value.trim(),resp:$("#rr").value.trim(),email:em,hash:await hash(em,$("#rp").value),oc:[]};
+ DB.of.push(o);save();lset("ap4m",o.id);posLogin()}
+function entrarDono(code){show(`<main class="w" style="max-width:460px"><a class="logo" href="#/">${mark()}Auto<b>Perfil</b></a><h1>Entrar no seu carro</h1><p class="mu">Digite o usuário e a senha que a oficina gerou para você.</p>
+<form class="c" onsubmit="doLoginD(event);return false"><input type="hidden" id="dc" value="${E(code||"")}">${code?`<div class="note">Veículo ${E(code)}</div>`:""}<label>Usuário<input id="du" autocapitalize="none" required></label><label>Senha<input id="dp" type="password" required></label><button class="btn wide">Entrar</button></form>
+<a class="lk" href="#/">← Voltar</a></main>`)}
+async function doLoginD(e){e.preventDefault();
+ if(Date.now()<trava)return toast("Muitas tentativas. Aguarde alguns segundos.");
+ const u=$("#du").value.trim().toLowerCase(),h=await hash(u,$("#dp").value),c=$("#dc").value;
+ const v=DB.ve.find(x=>x.user===u&&x.hash===h&&(!c||x.codigo===c));
+ if(!v){if(++falhas>=5){trava=Date.now()+30000;falhas=0}return toast("Usuário ou senha incorretos")}
+ falhas=0;lset("ap4d",v.id);go("/d")}
+function entrarRev(){show(`<main class="w" style="max-width:460px"><a class="logo" href="#/">${mark()}Auto<b>Perfil</b></a><h1>Consulta da revenda</h1><p class="mu">Digite o código do carro ou leia o QR Code com a câmera do celular.</p>
+<form class="c" onsubmit="go('/r/'+$('#rcod').value.trim().toUpperCase());return false"><label style="margin-top:0">Código<input id="rcod" placeholder="AP-XXXXXXXX" required></label><button class="btn wide">Consultar</button></form><a class="lk" href="#/">← Voltar</a></main>`)}
+
+/* ========== REVENDA (só leitura, só se o dono liberar) ========== */
+function revenda(code){const v=DB.ve.find(x=>x.codigo===code.toUpperCase());
+ const hd=`<a class="logo big" href="#/">${mark()}Auto<b>Perfil</b></a>`;
+ if(!v)return show(`<main class="w ct">${hd}<h1>Veículo não encontrado</h1><a class="btn" href="#/">Início</a></main>`);
+ if(!v.share)return show(`<main class="w ct">${hd}<h1>Acesso não liberado</h1><p class="mu">O dono deste veículo não liberou o histórico para revendas.</p><a class="btn" href="#/">Início</a></main>`);
+ show(`<main class="w"><div class="ct">${hd}</div><section class="c hl ct"><div class="mu s">${E(v.versao)} · ${E(v.cor)}</div><h1 class="h1s">${E(v.marca)} ${E(v.modelo)} ${E(v.ano)}</h1></section>
+ <h4 class="sec">REVISÕES E TROCAS</h4>${dealer(v)}<h4 class="sec">PLANO DO FABRICANTE</h4>${planoHTML(v,false)}</main>`)}
+
+/* ========== MECÂNICO: NAVEGAÇÃO E BIBLIOTECA ========== */
+function nav(me,at){return`<header class="top"><div class="tw"><a class="logo" href="#/m">${mark()}Auto<b>Perfil</b></a><nav>${[["m","Biblioteca","/m"],["scan","Escanear","/m/scan"],["ag","Agenda","/m/agenda"],["ass","Assinatura","/m/assinatura"]].map(x=>`<a class="${at===x[0]?"on":""}" href="#${x[2]}">${x[1]}</a>`).join("")}</nav><div class="usr"><div><b>${E(me.resp)}</b><span>${E(me.nome)}</span></div><span class="av">${ini(me.resp)}</span><button class="lo" onclick="sair()" title="Sair">${I("out")}</button></div></div></header>`}
+let filtro="todos",q="";
+function setFiltro(f){filtro=f;route()}
+const atendido=(v,me)=>!(me.oc||[]).includes(v.id)&&(v.of===me.id||DB.se.some(s=>s.vid===v.id&&s.of===me.id));
+function biblio(me){show(nav(me,"m")+`<main class="w"><div class="row"><div><h1>Biblioteca</h1><p class="mu" id="sub" style="margin:0"></p></div><a class="btn sm" href="#/m/scan">${I("scan")} Escanear</a></div>
+<div class="sbox">${I("search")}<input id="q" placeholder="Buscar por modelo, placa, código ou dono" oninput="q=this.value;lista()" value="${E(q)}"></div>
+<div class="pills">${[["todos","Todos"],["pf","Com problema futuro"]].map(x=>`<button class="pill ${filtro===x[0]?"on":""}" onclick="setFiltro('${x[0]}')">${x[1]}</button>`).join("")}</div>
+<div id="lista"></div><a class="btn wide" href="#/m/novo">${I("plus")} Cadastrar veículo</a></main>`);lista()}
+function lista(){const me=DB.of.find(o=>o.id===ms()),all=DB.ve.filter(v=>atendido(v,me)),t=q.toLowerCase();
+ $("#sub").textContent=all.length+(all.length===1?" veículo atendido":" veículos atendidos");
+ const ve=all.filter(v=>(v.marca+" "+v.modelo+" "+v.placa+" "+v.codigo+" "+v.dono).toLowerCase().includes(t)).filter(v=>filtro==="pf"?pfs(v.id).length>0:true);
+ $("#lista").innerHTML=ve.length?ve.map(v=>{const sv=DB.se.filter(s=>s.vid===v.id&&s.of===me.id).sort((a,b)=>b.data.localeCompare(a.data));
+  return`<a class="vc" href="#/m/v/${v.id}"><span class="vi">${I("car",24)}</span><div class="vb"><div><b>${E(v.marca)} ${E(v.modelo)}</b> <span class="yr">${E(v.ano)}</span></div><div class="vm"><code>${E(v.placa)}</code><span class="mu">${km(v.km)} km</span></div><div class="chs"><span class="ch">${sv.length} serviço(s) nesta oficina</span>${topNivel(v)}</div>${sv[0]?`<div class="mu s" style="margin-top:6px">Último: ${E(sv[0].tipo)} em ${dl(sv[0].data)}</div>`:""}</div><button class="tr" onclick="event.preventDefault();event.stopPropagation();ocultar('${v.id}')" aria-label="Remover da biblioteca">${I("trash")}</button></a>`}).join(""):`<div class="c mu">${all.length?"Nenhum veículo encontrado.":"Nenhum veículo ainda. Escaneie um QR Code ou cadastre um veículo."}</div>`}
+function ocultar(id){if(!confirm("Remover da biblioteca? O histórico do veículo é preservado."))return;const me=DB.of.find(o=>o.id===ms());(me.oc=me.oc||[]).push(id);save();lista()}
+
+/* ========== MECÂNICO: FICHA DO VEÍCULO ========== */
+let curV=null,aba="resumo";
+function pcard(p,edit){const lim=p.km+p.ate;return`<div class="pf ${p.nivel} ${p.ok?"ok":""}"><div class="row">${chipNivel(p.nivel)}${p.ok?`<span class="mu s">${I("check",14)} Resolvido</span>`:edit?`<button class="rs" onclick="resolver('${p.id}')">${I("check",16)} Resolvido</button>`:""}</div><h3>${E(p.titulo)}</h3><p class="mu s" style="margin:0"><b style="color:var(--fg)">${p.ate?"Em até "+km(p.ate)+" km</b> (aos "+km(lim)+" km)":"Sem prazo definido</b>"} · ${E(ofNome(p.of))} · ${dl(p.data)}</p></div>`}
+function tl(list,full){if(!list.length)return'<div class="c mu">Nenhuma manutenção registrada ainda.</div>';
+ return list.slice().sort((a,b)=>b.data.localeCompare(a.data)||b.km-a.km).map(s=>{const pt=s.itens.reduce((t,i)=>t+i.q*i.p,0),mo=s.itens.reduce((t,i)=>t+i.mo,0);
+ return`<article class="c"><div class="row"><b>${E(s.tipo)}</b><span class="ch">${dl(s.data)} · ${km(s.km)} km</span></div><p class="mu" style="margin:6px 0 8px">${E(s.desc)}</p>
+ ${s.itens.map(i=>`<div class="ln"><div><b>${E(i.n)}</b><div class="mu s">${i.m?E(i.m)+" · ":""}Qtd ${i.q}</div></div>${full?`<div class="pr"><b>${brl(i.q*i.p+i.mo)}</b>${i.mo?`<span class="mu s">peça ${brl(i.q*i.p)} + mão de obra ${brl(i.mo)}</span>`:""}</div>`:""}</div>`).join("")}
+ ${(s.fotos||[]).length?`<div style="margin-top:6px">${s.fotos.map(f=>`<img class="fo" src="${f}" onclick="zoom(this.src)" alt="Foto do serviço">`).join("")}</div>`:""}
+ ${full?`<div class="tot"><span>Total</span><b>${brl(pt+mo)}</b></div>`:""}<div class="mu s" style="margin-top:8px">${E(ofNome(s.of))}</div></article>`}).join("")}
+function zoom(s){const d=document.createElement("div");d.className="lb";d.innerHTML=`<img src="${s}" alt="">`;d.onclick=()=>d.remove();document.body.appendChild(d)}
+function pecasAgg(se){const m={};se.forEach(s=>s.itens.forEach(i=>{const k=(i.n+"|"+i.m).toLowerCase(),c=m[k]||(m[k]={n:i.n,m:i.m,q:0,x:0,l:""});c.q+=i.q;c.x++;if(s.data>c.l)c.l=s.data}));return Object.values(m).sort((a,b)=>b.l.localeCompare(a.l))}
+const pecasHTML=se=>{const a=pecasAgg(se);return a.length?a.map(p=>`<div class="c row"><div><b>${E(p.n)}</b><div class="mu s">${p.m?E(p.m)+" · ":""}Última troca em ${dl(p.l)} · ${p.x}x</div></div><span class="ch cy">${p.q}</span></div>`).join(""):'<div class="c mu">Nenhuma peça registrada.</div>'};
+/* Plano do fabricante: intervalo em meses, contado a partir da última troca registrada */
+function planoHTML(v,edit){const se=DB.se.filter(s=>s.vid===v.id);
+ return(v.esp||[]).map(e=>{let l="";se.forEach(s=>{if(s.data>l&&(nz(s.tipo)===nz(e.item)||s.itens.some(i=>nz(i.n).includes(nz(e.item)))))l=s.data});
+ let ch='<span class="ch">Sem registro</span>',sub="Nenhuma troca registrada ainda.";
+ if(l){const due=addMeses(l,e.meses),d=diasAte(due);ch=d<0?`<span class="ch red">Vencido há ${-d} dias</span>`:d<=30?`<span class="ch amb">Vence em ${d} dias</span>`:`<span class="ch grn">Vence em ${dl(due)}</span>`;sub="Última troca em "+dl(l)+" · próxima até "+dl(due)}
+ return`<div class="c"><div class="row"><b>${E(e.item)}</b>${ch}</div><p class="mu s" style="margin:4px 0 0">A cada ${e.meses} meses${e.nota?" · "+E(e.nota):""}<br>${sub}</p>${edit?`<button class="tr" onclick="delEsp('${v.id}','${e.id}')">${I("trash",15)} Remover</button>`:""}</div>`}).join("")||'<div class="c mu">Nenhuma especificação do fabricante cadastrada.</div>'}
+function veiculo(me,id){const v=vOf(id);
+ if(!v)return show(nav(me,"m")+`<main class="w"><div class="c">Veículo não encontrado. <a href="#/m" style="color:var(--pr)">Voltar</a></div></main>`);
+ curV=id;
+ show(nav(me,"m")+`<main class="w"><div class="hd"><a class="ib" href="#/m">${I("back")}</a><div><h1 class="h1s">${E(v.marca)} ${E(v.modelo)} ${E(v.ano)}</h1><p class="mu" style="margin:0">${E(v.versao)} · ${E(v.cor)}</p></div><button class="ib" onclick="togQR()" aria-label="QR Code">${I("qr")}</button></div>
+ <section class="c" id="qrbox" hidden><div id="label"><b>AutoPerfil</b><div class="mu s">${E(v.marca)} ${E(v.modelo)} · ${E(v.codigo)}</div><div id="qr"></div></div><div class="row"><button class="btn sm" onclick="window.print()">Imprimir etiqueta</button><button class="btn sm ghost" onclick="copiar('${linkQ(v)}')">Copiar link</button></div></section>
+ <section class="c"><div class="chs"><code>${E(v.placa)}</code></div><div class="kv"><div><span>Quilometragem</span><b>${km(v.km)} km</b></div><div><span>Dono</span><b>${E(v.dono)}</b></div><div><span>Chassi</span><b style="font-family:ui-monospace,Consolas,monospace;font-size:13px">${E(v.chassi||"—")}</b></div><div><span>Código</span><b style="font-family:ui-monospace,Consolas,monospace;font-size:13px">${E(v.codigo)}</b></div></div>
+ <a class="btn wide" href="#/m/v/${v.id}/manut">${I("plus")} Registrar manutenção</a></section>
+ <div class="tabs">${[["resumo","Resumo"],["hist","Histórico"],["pecas","Peças"],["plano","Fabricante"],["obs","Observações"]].map(x=>`<button data-t="${x[0]}" onclick="aba='${x[0]}';abaRender()">${x[1]}</button>`).join("")}</div><div id="aba"></div></main>`);abaRender()}
+function togQR(){const b=$("#qrbox");b.hidden=!b.hidden;if(!b.hidden)mkQR($("#qr"),linkQ(vOf(curV)))}
+function abaRender(){const v=vOf(curV),se=DB.se.filter(s=>s.vid===v.id);let h="";
+ $$(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===aba));
+ if(aba==="resumo"){const pf=DB.pf.filter(p=>p.vid===v.id).sort((a,b)=>(a.ok?1:0)-(b.ok?1:0));
+  h='<h4 class="sec">PROBLEMAS FUTUROS</h4>'+(pf.length?pf.map(p=>pcard(p,true)).join(""):'<div class="c mu">Nenhum problema futuro registrado.</div>');
+  const u=se.slice().sort((a,b)=>b.data.localeCompare(a.data))[0];h+='<h4 class="sec">ÚLTIMA MANUTENÇÃO</h4>'+(u?tl([u],true):'<div class="c mu">Sem manutenções ainda.</div>')}
+ else if(aba==="hist")h=tl(se,true);
+ else if(aba==="pecas")h=pecasHTML(se);
+ else if(aba==="plano")h=`<form class="c" onsubmit="addEsp(event);return false"><h2>Especificação do fabricante</h2><p class="mu s" style="margin:0">O item é comparado com as peças e serviços registrados. Use um nome curto, como "Óleo".</p><label>Item<input id="ei" list="ed" placeholder="Ex: Óleo" required></label><datalist id="ed">${["Óleo","Filtro de óleo","Filtro de ar","Filtro de combustível","Pastilha de freio","Fluido de freio","Correia dentada","Velas","Bateria","Arrefecimento"].map(x=>`<option>${x}</option>`).join("")}</datalist><div class="two"><label>Trocar a cada (meses)<input id="em" type="number" min="1" required></label><label>Detalhe (opcional)<input id="en" placeholder="Ex: 5W30 sintético"></label></div><button class="btn sm wide">Adicionar ao plano</button></form>`+planoHTML(v,true);
+ else{const ob=DB.ob.filter(o=>o.vid===v.id).sort((a,b)=>b.data.localeCompare(a.data));
+  h=`<form class="c" onsubmit="addObs(event);return false"><textarea id="ot" rows="2" placeholder="Anotação sobre o veículo" required></textarea><button class="btn sm wide">Salvar observação</button></form>`+(ob.length?ob.map(o=>`<div class="c"><p style="margin:0 0 6px">${E(o.texto)}</p><span class="mu s">${E(ofNome(o.of))} · ${dl(o.data)}</span></div>`).join(""):'<div class="c mu">Nenhuma observação.</div>')}
+ $("#aba").innerHTML=h}
+function resolver(id){DB.pf.find(p=>p.id===id).ok=true;save();abaRender()}
+function addObs(e){e.preventDefault();DB.ob.push({id:uid(8),vid:curV,of:ms(),data:hoje(),texto:$("#ot").value.trim()});save();abaRender()}
+function addEsp(e){e.preventDefault();const v=vOf(curV);(v.esp=v.esp||[]).push({id:uid(6),item:$("#ei").value.trim(),meses:+$("#em").value,nota:$("#en").value.trim()});save();abaRender()}
+function delEsp(vid,id){const v=vOf(vid);v.esp=v.esp.filter(e=>e.id!==id);save();abaRender()}
+
+/* ========== MECÂNICO: REGISTRAR MANUTENÇÃO ========== */
+let FOTOS=[];
+function manut(me,id){const v=vOf(id);curV=id;FOTOS=[];
+ if(!v)return go("/m");
+ show(nav(me,"m")+`<main class="w"><div class="hd"><a class="ib" href="#/m/v/${id}">${I("back")}</a><div><h1 class="h1s">Registrar manutenção</h1><p class="mu" style="margin:0">${E(v.marca)} ${E(v.modelo)} ${E(v.ano)} · ${E(v.placa)}</p></div></div>
+ <form id="mf" onsubmit="salvarManut(event,'${id}');return false">
+ <section class="c"><h2>Serviço</h2><label>Tipo<select id="mt" required><option value="">Selecione o tipo</option>${CATS.map(c=>`<option>${c}</option>`).join("")}</select></label>
+ <div class="two"><label>Data<input id="md" type="date" value="${hoje()}" required></label><label><span class="row">Km atual<span class="mu s" style="font-weight:400">Último: ${km(v.km)} km</span></span><input id="mk" type="number" min="0" value="${v.km}" required></label></div>
+ <label>Descrição<textarea id="mdesc" rows="3" placeholder="Ex: Troca de óleo e filtro, verificação de fluidos." required></textarea></label></section>
+ <section class="c"><h2>Peças e serviços</h2><p class="mu s" style="margin:0 0 10px">Cada item aparece separado no histórico.</p><div id="itens"></div><button type="button" class="btn ghost wide" style="margin-top:0" onclick="addItem()">${I("plus")} Adicionar peça ou serviço</button></section>
+ <section class="c"><h2>Fotos dos problemas <span class="mu" style="font-weight:400">(opcional)</span></h2><div id="fts"></div><label class="btn ghost sm" style="display:inline-flex;margin-top:10px;cursor:pointer">${I("cam")} Adicionar fotos<input type="file" accept="image/*" multiple hidden onchange="addFotos(this)"></label></section>
+ <section class="c"><h2>Problema futuro <span class="mu" style="font-weight:400">(opcional)</span></h2><label>O que precisa de atenção<input id="pt" placeholder="Ex: Disco de freio próximo do limite"></label>
+ <div class="two"><label>Nível<select id="pn"><option value="monitorar">Monitorar</option><option value="atencao">Atenção</option><option value="urgente">Urgente</option></select></label><label>Em até (km)<input id="pa" type="number" min="0" placeholder="Ex: 5000"></label></div></section>
+ <section class="c"><h2>Observação <span class="mu" style="font-weight:400">(opcional)</span></h2><textarea id="mo" rows="2"></textarea></section>
+ <div class="bar"><div class="row"><span class="mu s" id="tt"></span><b id="tg"></b></div><button class="btn">${I("save")} Salvar manutenção</button></div></form></main>`);
+ addItem();calc()}
+function addFotos(inp){[...inp.files].forEach(f=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);FOTOS.push(c.toDataURL("image/jpeg",.65));fotosR()};im.src=r.result};r.readAsDataURL(f)});inp.value=""}
+function fotosR(){$("#fts").innerHTML=FOTOS.map((s,i)=>`<span class="ph"><img src="${s}" alt="Foto ${i+1}"><button type="button" onclick="FOTOS.splice(${i},1);fotosR()" aria-label="Remover foto">×</button></span>`).join("")}
+function addItem(){const d=document.createElement("div");d.className="it";
+ d.innerHTML=`<div class="row ih"><b></b><button type="button" class="tr" onclick="this.closest('.it').remove();calc()" aria-label="Remover item">${I("trash")}</button></div><label>Peça ou serviço<input class="in" placeholder="Ex: Pastilha de freio dianteira"></label><div class="four"><label>Qtd<input class="iq" type="number" min="1" value="1" oninput="calc()"></label><label>Marca<input class="im" placeholder="Ex: Bosch"></label><label>Preço un. (R$)<input class="ip" type="number" min="0" step="0.01" placeholder="0,00" oninput="calc()"></label><label>Mão de obra (R$)<input class="io" type="number" min="0" step="0.01" placeholder="0,00" oninput="calc()"></label></div>`;
+ $("#itens").appendChild(d)}
+function calc(){let p=0,m=0;$$("#itens .it").forEach(r=>{p+=(+r.querySelector(".iq").value||0)*(+r.querySelector(".ip").value||0);m+=+r.querySelector(".io").value||0});$("#tt").textContent="Peças "+brl(p)+" + mão de obra "+brl(m);$("#tg").textContent=brl(p+m)}
+function salvarManut(e,id){e.preventDefault();
+ const itens=$$("#itens .it").map(r=>({n:r.querySelector(".in").value.trim(),q:+r.querySelector(".iq").value||1,m:r.querySelector(".im").value.trim(),p:+r.querySelector(".ip").value||0,mo:+r.querySelector(".io").value||0})).filter(i=>i.n);
+ if(!itens.length)return toast("Adicione ao menos uma peça ou serviço");
+ const snap=JSON.stringify(DB),v=vOf(id),k=+$("#mk").value,data=$("#md").value;
+ DB.se.push({id:uid(8),vid:id,of:ms(),data,km:k,tipo:$("#mt").value,desc:$("#mdesc").value.trim(),itens,fotos:FOTOS.slice()});
+ if(k>v.km)v.km=k;
+ const pt=$("#pt").value.trim();if(pt)DB.pf.push({id:uid(8),vid:id,of:ms(),nivel:$("#pn").value,titulo:pt,ate:+$("#pa").value||0,km:k,data,ok:false});
+ const ob=$("#mo").value.trim();if(ob)DB.ob.push({id:uid(8),vid:id,of:ms(),data,texto:ob});
+ if(!save()){DB=JSON.parse(snap);return toast("Sem espaço para salvar. Remova algumas fotos e tente de novo.")}
+ FOTOS=[];toast("Manutenção salva no histórico");aba="hist";go("/m/v/"+id)}
+
+/* ========== MECÂNICO: NOVO VEÍCULO E CREDENCIAIS ========== */
+let cred=null;
+function novo(me){show(nav(me,"m")+`<main class="w"><div class="hd"><a class="ib" href="#/m">${I("back")}</a><div><h1 class="h1s">Cadastrar veículo</h1><p class="mu" style="margin:0">Gere o acesso do cliente ao final.</p></div></div>
+<form onsubmit="doNovo(event);return false">
+<section class="c"><h2>Veículo</h2><div class="two"><label>Marca<input id="nm" required></label><label>Modelo<input id="nd" required></label></div><div class="two"><label>Ano<input id="na" type="number" min="1950" max="2100" required></label><label>Versão<input id="nv"></label></div><div class="two"><label>Placa<input id="np" required></label><label>Cor<input id="nc"></label></div><div class="two"><label>Chassi (VIN)<input id="nx"></label><label>Km atual<input id="nk" type="number" min="0" required></label></div></section>
+<section class="c"><h2>Proprietário</h2><div class="two"><label>Nome<input id="fn" required></label><label>Telefone<input id="nt"></label></div></section>
+<section class="c"><h2>Acesso do cliente</h2><p class="mu s" style="margin:0">O cliente escolhe, você digita. Ou toque em Gerar.</p><div class="two"><label>Usuário<input id="cu" autocapitalize="none" required></label><label>Senha<input id="cp" required></label></div><button type="button" class="btn ghost sm" style="margin-top:10px" onclick="gerar()">Gerar usuário e senha</button></section>
+<button class="btn wide">${I("save")} Cadastrar e gerar QR Code</button></form></main>`)}
+function gerar(){const n=($("#fn").value.trim().split(" ")[0]||"cliente").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z]/g,"")||"cliente";$("#cu").value=n+Math.floor(100+Math.random()*900);$("#cp").value=uid(6)}
+async function doNovo(e){e.preventDefault();const u=$("#cu").value.trim().toLowerCase(),pw=$("#cp").value;
+ if(DB.ve.some(v=>v.user===u))return toast("Esse usuário já existe. Escolha outro.");
+ if(pw.length<4)return toast("A senha precisa de no mínimo 4 caracteres");
+ const v={id:uid(10),of:ms(),marca:$("#nm").value.trim(),modelo:$("#nd").value.trim(),ano:$("#na").value,versao:$("#nv").value.trim(),cor:$("#nc").value.trim(),placa:$("#np").value.trim().toUpperCase(),chassi:$("#nx").value.trim(),km:+$("#nk").value,dono:$("#fn").value.trim(),tel:$("#nt").value.trim(),codigo:"AP-"+uid(8).toUpperCase(),user:u,hash:await hash(u,pw),share:false,esp:[],criado:hoje()};
+ DB.ve.push(v);save();cred={id:v.id,pw};go("/m/entregue/"+v.id)}
+function entregue(me,id){const v=vOf(id);if(!v||!cred||cred.id!==id)return go("/m/v/"+id);
+ const txt=`AutoPerfil\nVeículo: ${v.marca} ${v.modelo} ${v.ano}\nUsuário: ${v.user}\nSenha: ${cred.pw}\nLeia o QR Code do carro, escolha Motorista e entre com esses dados.\n${linkQ(v)}`;
+ show(nav(me,"m")+`<main class="w"><h1>Veículo cadastrado</h1><p class="mu">Entregue estes dados ao cliente. A senha não aparece de novo depois desta tela.</p>
+ <section class="c hl"><div class="kv" style="margin:0"><div><span>Usuário</span><b>${E(v.user)}</b></div><div><span>Senha</span><b>${E(cred.pw)}</b></div></div><button class="btn ghost wide" onclick="copiar(decodeURIComponent('${encodeURIComponent(txt)}'))">Copiar dados de acesso</button></section>
+ <section class="c ct" id="label"><b>AutoPerfil</b><div class="mu s">${E(v.marca)} ${E(v.modelo)} · ${E(v.codigo)}</div><div id="qr"></div><div class="row" style="justify-content:center"><button class="btn sm" onclick="window.print()">Imprimir etiqueta</button></div></section>
+ <a class="btn wide ghost" href="#/m/v/${v.id}" onclick="cred=null">Abrir ficha do veículo</a></main>`);mkQR($("#qr"),linkQ(v))}
+
+/* ========== MECÂNICO: ESCANEAR, AGENDA E ASSINATURA ========== */
+function scan(me){show(nav(me,"scan")+`<main class="w"><h1>Escanear</h1><p class="mu">Aponte para o QR Code do veículo para abrir a ficha.</p><video id="cam" playsinline muted></video><p class="mu s" id="camMsg"></p>
+<form class="c" onsubmit="abrirCodigo($('#cx').value);return false"><label style="margin-top:0">Ou digite o código<input id="cx" placeholder="AP-XXXXXXXX"></label><button class="btn wide">Abrir veículo</button></form></main>`);scanIniciar()}
+async function scanIniciar(){const v=$("#cam");try{if(!("BarcodeDetector"in window))throw 0;scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}});v.srcObject=scanStream;await v.play();const bd=new BarcodeDetector({formats:["qr_code"]});
+ const tick=async()=>{if(!scanStream)return;try{const r=await bd.detect(v);if(r.length)return abrirCodigo(r[0].rawValue)}catch(e){}scanT=setTimeout(tick,300)};tick()}catch(e){$("#camMsg").textContent="Câmera indisponível neste aparelho ou navegador. Digite o código abaixo."}}
+function abrirCodigo(t){const m=String(t).match(/AP-[A-Z0-9]{8}/i);if(!m)return toast("Código inválido");
+ const v=DB.ve.find(x=>x.codigo===m[0].toUpperCase());if(!v)return toast("Veículo não encontrado");go("/m/v/"+v.id)}
+const STAG={pendente:["amb","Aguardando"],confirmado:["grn","Confirmado"],recusado:["red","Recusado"],cancelado:["","Cancelado"]};
+function agenda(me){const l=DB.ag.filter(a=>a.of===me.id).sort((a,b)=>(a.data+a.hora).localeCompare(b.data+b.hora));
+ show(nav(me,"ag")+`<main class="w"><h1>Agenda de revisões</h1><p class="mu">Pedidos feitos pelos motoristas para a sua oficina.</p>${l.length?l.map(a=>{const v=vOf(a.vid)||{},s=STAG[a.st];
+ return`<article class="c"><div class="row"><b>${E(v.marca)} ${E(v.modelo)}</b><span class="ch ${s[0]}">${s[1]}</span></div><p style="margin:6px 0 0"><b>${dl(a.data)}${a.hora?" às "+E(a.hora):""}</b></p><p class="mu s" style="margin:2px 0 0">${E(v.dono)}${v.tel?" · "+E(v.tel):""} · ${E(v.placa)}${a.obs?"<br>"+E(a.obs):""}</p>
+ <div class="chs" style="margin-top:10px"><a class="btn sm ghost" href="#/m/v/${a.vid}">Abrir ficha</a>${a.st==="pendente"?`<button class="btn sm" onclick="agSt('${a.id}','confirmado')">Confirmar</button><button class="btn sm ghost" onclick="agSt('${a.id}','recusado')">Recusar</button>`:""}</div></article>`}).join(""):'<div class="c mu">Nenhum pedido de revisão até agora.</div>'}</main>`)}
+function agSt(id,st){DB.ag.find(a=>a.id===id).st=st;save();route()}
+function assin(me){show(nav(me,"ass")+`<main class="w"><h1>Assinatura</h1><p class="mu">${E(me.nome)}</p><section class="c hl"><div class="row"><div><h2>Período de avaliação</h2><p class="mu" style="margin:0">Acesso completo ao protótipo.</p></div><span class="ch grn">Ativo</span></div></section><section class="c"><h2>Cobrança</h2><p class="mu" style="margin:0">A cobrança ainda não está ligada a nenhum meio de pagamento. Planos e valores serão definidos antes do lançamento.</p></section></main>`)}
+
+/* ========== CLIENTE (MOTORISTA) ========== */
+let dab="hist";
+function driver(v){
+ show(`<header class="top"><div class="tw"><a class="logo" href="#/d">${mark()}Auto<b>Perfil</b></a><div class="usr"><div><b>${E(v.dono)}</b><span>${E(v.marca)} ${E(v.modelo)}</span></div><span class="av">${ini(v.dono)}</span><button class="lo" onclick="sairD()" title="Sair">${I("out")}</button></div></div></header>
+ <main class="w"><section class="c hl"><div class="mu s">${E(v.versao)} · ${E(v.cor)}</div><h1 class="h1s">${E(v.marca)} ${E(v.modelo)} ${E(v.ano)}</h1><div class="chs" style="margin-top:8px"><code>${E(v.placa)}</code><span class="mu">${km(v.km)} km</span></div></section>
+ <section class="c"><div class="row" style="flex-wrap:nowrap"><div><b>${I("store",16)} Compartilhar com revenda</b><p class="mu s" style="margin:2px 0 0">${v.share?"Ativado: a revenda vê revisões, datas e trocas ao ler o QR Code.":"Desativado: nada é exibido para revendas."}</p></div><button class="sw ${v.share?"on":""}" role="switch" aria-checked="${!!v.share}" aria-label="Compartilhar com revenda" onclick="togShare('${v.id}')"></button></div><button class="pill" style="margin-top:12px" onclick="$('#dp').hidden=!$('#dp').hidden">Ver o que a revenda enxerga</button><div id="dp" hidden>${dealer(v)}</div></section>
+ <div class="tabs">${[["hist","Histórico"],["pecas","Peças"],["plano","Fabricante"],["prob","Problemas futuros"],["rev","Marcar revisão"]].map(x=>`<button data-t="${x[0]}" onclick="dab='${x[0]}';dabRender('${v.id}')">${x[1]}</button>`).join("")}</div><div id="aba"></div></main>`);dabRender(v.id)}
+function dabRender(id){const v=vOf(id),se=DB.se.filter(s=>s.vid===id);let h="";
+ $$(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===dab));
+ if(dab==="hist")h=tl(se,true);else if(dab==="pecas")h=pecasHTML(se);else if(dab==="plano")h=planoHTML(v,false);
+ else if(dab==="prob"){const pf=DB.pf.filter(p=>p.vid===id).sort((a,b)=>(a.ok?1:0)-(b.ok?1:0));h=pf.length?pf.map(p=>pcard(p,false)).join(""):'<div class="c mu">Nenhum problema futuro registrado.</div>'}
+ else{const ag=DB.ag.filter(a=>a.vid===id).sort((a,b)=>b.data.localeCompare(a.data));
+  h=DB.of.length?`<form class="c" onsubmit="agendar(event,'${id}');return false"><h2>Marcar revisão</h2><label>Oficina<select id="ao" required><option value="">Escolha uma oficina</option>${DB.of.map(o=>`<option value="${o.id}">${E(o.nome)}</option>`).join("")}</select></label><div class="two"><label>Data<input id="ad" type="date" min="${hoje()}" required></label><label>Horário<input id="ah" type="time"></label></div><label>Observação (opcional)<textarea id="aob" rows="2"></textarea></label><button class="btn wide">Enviar pedido</button></form>`:'<div class="c mu">Nenhuma oficina cadastrada no app ainda.</div>';
+  h+=ag.map(a=>{const s=STAG[a.st];return`<div class="c"><div class="row"><b>${E(ofNome(a.of))}</b><span class="ch ${s[0]}">${s[1]}</span></div><p class="mu s" style="margin:4px 0 0">${dl(a.data)}${a.hora?" às "+E(a.hora):""}</p>${a.st==="pendente"||a.st==="confirmado"?`<button class="tr" onclick="cancelAg('${a.id}')">Cancelar pedido</button>`:""}</div>`}).join("")}
+ $("#aba").innerHTML=h}
+function agendar(e,id){e.preventDefault();DB.ag.push({id:uid(8),vid:id,of:$("#ao").value,data:$("#ad").value,hora:$("#ah").value,obs:$("#aob").value.trim(),st:"pendente"});save();toast("Pedido enviado para a oficina");dabRender(id)}
+function cancelAg(id){DB.ag.find(a=>a.id===id).st="cancelado";save();dabRender(lget("ap4d"))}
+function togShare(id){const v=vOf(id);v.share=!v.share;save();route()}
+function dealer(v){if(!v.share)return'<div class="note">Compartilhamento desativado. A revenda não vê nada deste carro.</div>';
+ const se=DB.se.filter(s=>s.vid===v.id).sort((a,b)=>b.data.localeCompare(a.data));
+ return`<div class="note"><b>${E(v.marca)} ${E(v.modelo)} · ${E(v.ano)}</b>${se.length?se.map(s=>`<p style="margin:10px 0 0"><b>${dl(s.data)} · ${E(s.tipo)}</b><br><span class="mu">${s.itens.map(i=>E(i.n)+(i.m?" ("+E(i.m)+")":"")+" ×"+i.q).join(", ")}</span></p>`).join(""):'<p class="mu">Nenhuma revisão registrada.</p>'}<p class="mu s" style="margin:12px 0 0">Sem preços e sem dados pessoais.</p></div>`}
+
+route();
+</script>
+</body>
+</html>
